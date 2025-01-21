@@ -86,3 +86,23 @@ jobs:
         path: ./coverage-html/
 
   
+deploy:
+  runs-on: ubuntu-latest
+  needs: test
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.100'
+
+    - name: Build the project
+      run: dotnet publish --configuration Release --output ./api/bin/Release/net8.0/publish
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: cicd_deploy
+        folder: ./api/bin/Release/net8.0/publish
