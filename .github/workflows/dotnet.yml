@@ -72,7 +72,6 @@ jobs:
           exit 1
         fi
         echo "Code coverage meets the required threshold."
-          
 
     - name: Generate HTML Coverage Report
       run: |
@@ -85,11 +84,10 @@ jobs:
         name: html-coverage-report
         path: ./coverage-html/
 
-  
-deploy:
-  runs-on: ubuntu-latest
-  needs: test
-  steps:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
