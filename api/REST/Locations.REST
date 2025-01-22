@@ -38,3 +38,8 @@ Api-Key: a1b2c3d4e5
 #####
 DELETE http://localhost:5000/api/v1/locations/1
 Api-Key: a1b2c3d4e5
+
+
+#####
+POST http://localhost:5000/api/v1/locations/load/locations.json
+Api-Key: a1b2c3d4e5

@@ -21,4 +21,22 @@ public class Locations
     public DateTime UpdatedAt { get; set; }
 
     public ICollection<InventoriesLocations> Inventories { get; set; } = new List<InventoriesLocations>();
+
+
+    public Locations() {}
+
+    public Locations(int id, int warehouseId, string code, string name)
+    {
+        this.Id = id;
+        this.WarehouseId = warehouseId;
+        this.Code = code;
+        this.Name = name;
+    }
+
+    public Locations(int warehouseId, string code, string name)
+    {
+        this.WarehouseId = warehouseId;
+        this.Code = code;
+        this.Name = name;
+    }
 }

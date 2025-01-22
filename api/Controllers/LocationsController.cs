@@ -88,4 +88,11 @@ public class LocationController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("load/{path}")]
+    public async Task<IActionResult> LoadLocation([FromRoute] string path)
+    {
+        await _locationServices.ReadJson(path);
+        return Ok();
+    }
 }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 public class LocationServices : ILocations
@@ -70,5 +71,31 @@ public class LocationServices : ILocations
         _context.Locations.Remove(existingLocation);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task ReadJson(string path)
+    {
+        path = "data/" + path;
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            List<Locations>? locations = JsonSerializer.Deserialize<List<Locations>>(json);
+            if (locations == null) return;
+
+            await UploadToDB(locations);
+        }
+    }
+
+    public async Task<int> UploadToDB(List<Locations> locations)
+    {
+        var transaction = _context.Database.BeginTransaction();
+        foreach (Locations location in locations)
+        {
+            if (locations == null) return -1;
+            await _context.Locations.AddAsync(location);
+            await _context.SaveChangesAsync();
+        }
+        await transaction.CommitAsync();
+        return 1;
     }
 }
