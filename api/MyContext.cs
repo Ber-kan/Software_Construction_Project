@@ -18,7 +18,7 @@ public class MyContext : DbContext
     public DbSet<TransfersItem> TransferItems { get; set; }
     public virtual DbSet<Client> Client { get; set; }
     public DbSet<Inventory> Inventories { get; set; }
-    // public DbSet<InventoriesLocations> InventoriesLocations { get; set; }
+    public DbSet<InventoriesLocations> InventoriesLocations { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
     public DbSet<ShipmentsItem> ShipmentsItems { get; set; }
     public DbSet<Orders> Orders { get; set; }
@@ -98,6 +98,20 @@ public class MyContext : DbContext
         modelBuilder.Entity<InventoriesLocations>()
             .HasKey(il => new { il.InventoryId, il.LocationId });  // Composite key using inventoryId and locationId
         */
+
+        // Link InventoriesLocations as a linking table
+        modelBuilder.Entity<InventoriesLocations>()
+            .HasKey(il => new { il.InventoryId, il.LocationId });  // Composite primary key
+
+        modelBuilder.Entity<InventoriesLocations>()
+            .HasOne(il => il.Inventory)  // Each InventoriesLocations links to one Inventory
+            .WithMany(i => i.Locations) // Inventory can have many Locations
+            .HasForeignKey(il => il.InventoryId);
+
+        modelBuilder.Entity<InventoriesLocations>()
+            .HasOne(il => il.Location)  // Each InventoriesLocations links to one Location
+            .WithMany(l => l.Inventories) // Location can have many Inventories
+            .HasForeignKey(il => il.LocationId);
 
         // Shipment configuration
         modelBuilder.Entity<Shipment>()

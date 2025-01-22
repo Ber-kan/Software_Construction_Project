@@ -21,21 +21,14 @@ public class InventoryServices : IInventory
         return await _context.Inventories.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    //public async Task<List<Locations>> GetInventoryLocations(int id)
     public async Task<List<int>> GetInventoryLocations(int id)
     {
         if (id <= 0) return null;
 
-        var inventory = await _context.Inventories.FirstOrDefaultAsync(t => t.Id == id);
-        /*
-        if (inventory == null) return null;
-
-        // Fetch detailed location information based on the location IDs in the inventory
-        return await _context.Locations
-            .Where(l => inventory.Locations.Contains(l.Id))
+        return await _context.InventoriesLocations
+            .Where(il => il.InventoryId == id)
+            .Select(il => il.LocationId)
             .ToListAsync();
-        */
-        return inventory?.Locations;
     }
 
     public async Task<Inventory> AddInventory(Inventory inventory)
@@ -45,25 +38,23 @@ public class InventoryServices : IInventory
             throw new ArgumentNullException("Inventory or its locations list cannot be null.");
         }
 
-        // Check if the inventory already exists
         var existingInventory = await _context.Inventories.FirstOrDefaultAsync(i => i.Id == inventory.Id);
         if (existingInventory != null) return null;
 
-        // Ensure all location IDs exist in the database
-        var validLocations = await _context.Locations
-            .Where(l => inventory.Locations.Contains(l.Id))
-            .Select(l => l.Id)
-            .ToListAsync();
+        _context.Inventories.Add(inventory);
 
-        if (validLocations.Count != inventory.Locations.Count)
+        foreach (var inventoryLocation in inventory.Locations)
         {
-            throw new ArgumentException("One or more location IDs are invalid.");
+            _context.InventoriesLocations.Add(new InventoriesLocations
+            {
+                InventoryId = inventory.Id,
+                LocationId = inventoryLocation.LocationId  // Access LocationId correctly
+            });
         }
 
-        _context.Inventories.Add(inventory);
         await _context.SaveChangesAsync();
 
-        return inventory; 
+        return inventory;
     }
 
     public async Task<Inventory> UpdateInventory(int id, Inventory inventory)
@@ -81,21 +72,23 @@ public class InventoryServices : IInventory
         existingInventory.TotalOrdered = inventory.TotalOrdered;
         existingInventory.TotalAllocated = inventory.TotalAllocated;
         existingInventory.TotalAvailable = inventory.TotalAvailable;
-        existingInventory.CreatedAt = inventory.CreatedAt;
-        existingInventory.UpdatedAt = inventory.UpdatedAt;
+        existingInventory.UpdatedAt = DateTime.Now;
 
-        // Validate and update locations
-        var validLocations = await _context.Locations
-            .Where(l => inventory.Locations.Contains(l.Id))
-            .Select(l => l.Id)
+        var currentLocations = await _context.InventoriesLocations
+            .Where(il => il.InventoryId == id)
             .ToListAsync();
 
-        if (validLocations.Count != inventory.Locations.Count)
+        _context.InventoriesLocations.RemoveRange(currentLocations);
+
+        foreach (var inventoryLocation in inventory.Locations)
         {
-            throw new ArgumentException("One or more location IDs are invalid.");
+            _context.InventoriesLocations.Add(new InventoriesLocations
+            {
+                InventoryId = id,
+                LocationId = inventoryLocation.LocationId  // Access LocationId correctly
+            });
         }
 
-        existingInventory.Locations = validLocations;
         await _context.SaveChangesAsync();
 
         return existingInventory;
