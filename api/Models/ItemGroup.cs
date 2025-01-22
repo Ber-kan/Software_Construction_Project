@@ -9,11 +9,11 @@ public class ItemGroup
     public required string Name { get; set; }
     
     [JsonPropertyName("description")]
-    public required string Description { get; set; }
+    public string Description { get; set; }
     
     [JsonPropertyName("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     [JsonPropertyName("updated_at")]
-    public required DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

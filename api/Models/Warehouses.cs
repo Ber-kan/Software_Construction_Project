@@ -30,10 +30,10 @@ public class Warehouse
     public required Contact Contact { get; set; }
     
     [JsonPropertyName("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     [JsonPropertyName("updated_at")]
-    public required DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     
     [JsonPropertyName("locations")]
     public ICollection<Locations> Locations { get; set; } = new List<Locations>();

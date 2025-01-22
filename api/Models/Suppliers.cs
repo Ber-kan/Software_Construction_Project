@@ -15,7 +15,7 @@ public class Supplier
     public required string Address { get; set; }
     
     [JsonPropertyName("address_extra")]
-    public required string AddressExtra { get; set; }
+    public string AddressExtra { get; set; }
     
     [JsonPropertyName("city")]
     public required string City { get; set; }
@@ -39,8 +39,8 @@ public class Supplier
     public required string Reference { get; set; }
     
     [JsonPropertyName("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     [JsonPropertyName("updated_at")]
-    public required DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

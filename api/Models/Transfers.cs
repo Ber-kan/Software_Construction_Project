@@ -9,7 +9,7 @@ public class Transfer
     public required int Id { get; set; }
 
     [JsonPropertyName("reference")]
-    public required string Reference { get; set; }
+    public string Reference { get; set; }
 
     [JsonPropertyName("transfer_from")]
     public required int? TransferFrom { get; set; }
@@ -18,13 +18,13 @@ public class Transfer
     public required int TransferTo { get; set; }
 
     [JsonPropertyName("transfer_status")]
-    public required string TransferStatus { get; set; }
+    public string TransferStatus { get; set; }
 
     [JsonPropertyName("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     [JsonPropertyName("updated_at")]
-    public required DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     [JsonPropertyName("items")]
     public required List<TransfersItem> Items { get; set; } = new List<TransfersItem>();

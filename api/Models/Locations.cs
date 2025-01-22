@@ -15,8 +15,10 @@ public class Locations
     public required string Name { get; set; }
     
     [JsonPropertyName("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     [JsonPropertyName("updated_at")]
-    public required DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public ICollection<InventoriesLocations> Inventories { get; set; } = new List<InventoriesLocations>();
 }
