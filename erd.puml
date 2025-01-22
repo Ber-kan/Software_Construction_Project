@@ -1,0 +1,241 @@
+@startuml
+
+entity Inventory {
+    * Id: int
+    * ItemId: string
+    * Description: string
+    * ItemReference: string
+    * TotalOnHand: int
+    * TotalExpected: int
+    * TotalOrdered: int
+    * TotalAllocated: int
+    * TotalAvailable: int
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Contact {
+    * Id: int
+    * Name: string
+    * Phone: string
+    * Email: string
+}
+
+entity ItemGroup {
+    * Id: int
+    * Name: string
+    * Description: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity ItemLine {
+    * Id: int
+    * Name: string
+    * Description: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity ItemType {
+    * Id: int
+    * Name: string
+    * Description: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Supplier {
+    * Id: int
+    * Code: string
+    * Name: string
+    * Address: string
+    * AddressExtra: string
+    * City: string
+    * ZipCode: string
+    * Province: string
+    * Country: string
+    * ContactName: string
+    * Phonenumber: string
+    * Reference: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Warehouse {
+    * Id: int
+    * Code: string
+    * Name: string
+    * Address: string
+    * Zip: string
+    * City: string
+    * Province: string
+    * Country: string
+    * ContactId: int
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Locations {
+    * Id: int
+    * WarehouseId: int
+    * Code: string
+    * Name: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Orders {
+    * Id: int
+    * SourceId: int
+    * OrderDate: DateTime
+    * RequestDate: DateTime
+    * Reference: string
+    * ReferenceExtra: string
+    * OrderStatus: string
+    * Notes: string
+    * ShippingNotes: string
+    * PickingNotes: string
+    * WarehouseId: int
+    * ShipTo: int?
+    * BillTo: int?
+    * ShipmentId: int
+    * TotalAmount: decimal
+    * TotalDiscount: decimal
+    * TotalTax: decimal
+    * TotalSurcharge: decimal
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity OrdersItem {
+    * OrderId: int
+    * Uid: string
+    * Code: string
+    * Description: string
+    * ShortDescription: string
+    * UpcCode: string
+    * ModelNumber: string
+    * CommodityCode: string
+    * ItemLine: int
+    * ItemGroup: int
+}
+
+entity Shipment {
+    * Id: int
+    * OrderId: int
+    * SourceId: int
+    * OrderDate: DateOnly
+    * RequestDate: DateOnly
+    * ShipmentDate: DateOnly
+    * ShipmentType: string
+    * ShipmentStatus: string
+    * Notes: string
+    * CarrierCode: string
+    * CarrierDescription: string
+    * ServiceCode: string
+    * PaymentType: string
+    * TransferMode: string
+    * TotalPackageCount: int
+    * TotalPackageWeight: float
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity ShipmentsItem {
+    * ShippingId: int
+    * ItemId: string
+    * Amount: int
+}
+
+entity TransfersItem {
+    * TransferId: int
+    * ItemId: string
+    * Amount: int
+}
+
+entity Transfer {
+    * Id: int
+    * Reference: string
+    * TransferFrom: int?
+    * TransferTo: int
+    * TransferStatus: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity EndpointAccess {
+    * Id: int
+    * Endpoint: string?
+    * CanGet: bool
+    * CanPost: bool
+    * CanPut: bool
+    * CanDelete: bool
+    * UserId: int
+}
+
+entity User {
+    * Id: int
+    * ApiKey: string
+    * AppName: string
+    * HasFullAccess: bool
+}
+
+entity Client {
+    * Id: int
+    * Name: string
+    * Address: string
+    * City: string
+    * Zip: string
+    * Province: string
+    * Country: string
+    * ContactName: string
+    * ContactPhone: string
+    * ContactEmail: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+entity Item {
+    * Uid: string
+    * Code: string
+    * Description: string
+    * ShortDescription: string
+    * UpcCode: string
+    * ModelNumber: string
+    * CommodityCode: string
+    * ItemLine: int?
+    * ItemGroup: int?
+    * ItemType: int?
+    * UnitPurchaseQuantity: int
+    * UnitOrderQuantity: int
+    * PackOrderQuantity: int
+    * SupplierId: int?
+    * SupplierCode: string
+    * SupplierPartNumber: string
+    * CreatedAt: DateTime
+    * UpdatedAt: DateTime
+}
+
+Warehouse ||--o{ Locations : contains
+Orders ||--o{ OrdersItem : contains
+Shipment ||--o{ ShipmentsItem : contains
+Transfer ||--o{ TransfersItem : contains
+EndpointAccess ||--|| User : belongs to
+ItemLine ||--|| Item : belongs to
+ItemGroup ||--|| Item : belongs to
+ItemType ||--|| Item : belongs to
+Supplier ||--|| Item : supplies
+Item ||--o{ OrdersItem : contains
+Item ||--o{ TransfersItem : contains
+Item ||--o{ ShipmentsItem : contains
+Inventory ||--|| Locations : located at
+Inventory ||--|| Item : contains
+Contact ||--|| Client : contacts
+Contact ||--|| Supplier : contacts
+Contact ||--|| Warehouse : contacts
+Client ||--o{ Orders : places
+Client ||--o{ Warehouse : uses
+Client ||--o{ Supplier : uses
+
+@enduml
