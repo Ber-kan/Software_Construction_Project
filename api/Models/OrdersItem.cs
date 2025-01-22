@@ -12,10 +12,10 @@ public class OrdersItem
     public required string Code { get; set; }
 
     [JsonPropertyName("description")]
-    public required string Description { get; set; }
+    public string Description { get; set; }
 
     [JsonPropertyName("short_description")]
-    public required string ShortDescription { get; set; }
+    public string ShortDescription { get; set; }
 
     [JsonPropertyName("upc_code")]
     public required string UpcCode { get; set; }
@@ -24,11 +24,11 @@ public class OrdersItem
     public required string ModelNumber { get; set; }
 
     [JsonPropertyName("commodity_code")]
-    public required string CommodityCode { get; set; }
+    public string CommodityCode { get; set; }
 
     [JsonPropertyName("item_line")]
-    public required int ItemLine { get; set; }
+    public int ItemLine { get; set; }
 
     [JsonPropertyName("item_group")]
-    public required int ItemGroup { get; set; }
+    public int ItemGroup { get; set; }
 }
