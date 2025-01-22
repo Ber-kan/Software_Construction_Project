@@ -45,10 +45,18 @@ builder.Services.AddTransient<IOrdersInterface,OrdersServices>();
 builder.Services.AddTransient<Orders>();
 builder.Services.AddTransient<ItemLine>();
 
+// swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 app.UseMiddleware<Authentication>();  // Register custom API key middleware
 app.MapControllers();
 app.Urls.Add("http://localhost:5000");
 app.MapGet("/", () => "Hello World!");
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.Run();

@@ -11,6 +11,15 @@ public class Authentication
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Allow requests to Swagger UI and OpenAPI JSON
+        if (context.Request.Path.StartsWithSegments("/swagger") ||
+            context.Request.Path.StartsWithSegments("/v1/swagger.json")) // Adjust for your API version
+        {
+            await _next(context);
+            return;
+        }
+
+
         if (!context.Request.Headers.TryGetValue("Api-Key", out var apiKeyValues))
         {
             context.Response.StatusCode = 401; // Unauthorized
